@@ -6,7 +6,7 @@ appropriate for a medical domain.
 
 **Live demo:** https://intelligent-healthcare-assistant.vercel.app/
 
-> ⏳ Hosted on a free-tier backend that sleeps after 15 minutes of inactivity - 
+> Hosted on a free-tier backend that sleeps after 15 minutes of inactivity - 
 > the first request may take 30–50s to wake it up. Give it a moment on first load.
 
 ## What it does
