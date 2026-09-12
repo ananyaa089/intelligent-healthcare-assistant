@@ -6,3 +6,5 @@ pydantic
 python-multipart
 requests
 gunicorn
+groq
+python-dotenv

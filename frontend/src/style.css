@@ -15,6 +15,16 @@ body {
   padding: 20px;
 }
 
+.app-disclaimer {
+  font-size: 13px;
+  color: #7a5b00;
+  background: #fff8e1;
+  border: 1px solid #ffe082;
+  border-radius: 6px;
+  padding: 6px 10px;
+  margin-top: -8px;
+}
+
 .messages {
   height: 420px;
   overflow-y: auto;
@@ -50,6 +60,40 @@ body {
   display: inline-block;
 }
 
+.confidence-badge {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  color: white;
+  vertical-align: middle;
+}
+
+.sources {
+  margin-top: 8px;
+}
+
+.sources-toggle {
+  background: none;
+  border: none;
+  color: #2b8cff;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.sources ul {
+  margin: 6px 0 0 0;
+  padding-left: 18px;
+  font-size: 12px;
+  color: #555;
+}
+
+.sources .score {
+  color: #999;
+}
+
 .input-area {
   display: flex;
   gap: 10px;
@@ -63,6 +107,10 @@ input {
   font-size: 16px;
 }
 
+input:disabled {
+  background: #eee;
+}
+
 button {
   padding: 10px 16px;
   border: none;
@@ -74,4 +122,9 @@ button {
 
 button:hover {
   background: #1876e0;
+}
+
+button:disabled {
+  background: #99c2f0;
+  cursor: not-allowed;
 }
