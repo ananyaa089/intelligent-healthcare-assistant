@@ -5,7 +5,7 @@ import os
 import json
 import faiss
 import numpy as np
-from sentence_transformers import SentenceTransformer
+from fastembed import TextEmbedding
 from pathlib import Path
 from dotenv import load_dotenv
 from groq import Groq
@@ -75,7 +75,7 @@ def load_index():
     with open(meta_path, "r", encoding="utf-8") as f:
         meta = json.load(f)
 
-    embedder = SentenceTransformer(EMB_MODEL_NAME)
+    embedder = TextEmbedding(model_name=EMB_MODEL_NAME)
 
     if groq_client is None:
         print("WARNING: GROQ_API_KEY not set. /ask will fall back to raw retrieval "
@@ -92,7 +92,8 @@ def health():
 
 
 def retrieve(query: str, top_k: int):
-    q_emb = embedder.encode([query], convert_to_numpy=True)
+    # fastembed returns a generator of float32 numpy arrays (one per input text)
+    q_emb = np.array(list(embedder.embed([query])), dtype=np.float32)
     faiss.normalize_L2(q_emb)
 
     D, I = index.search(q_emb, top_k)
