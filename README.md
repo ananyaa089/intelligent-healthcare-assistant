@@ -11,12 +11,12 @@ appropriate for a medical domain.
 Given a medical question, the system:
 1. Embeds the query and searches a FAISS index of ~16,000 Q&A pairs from the
    [MedQuAD](https://github.com/abachaa/MedQuAD) dataset for the closest matches
-2. Checks a confidence threshold on the retrieval score — if nothing matches well
+2. Checks a confidence threshold on the retrieval score, if nothing matches well
    enough, it returns a safe fallback ("consult a healthcare professional") instead
    of guessing
 3. If confidence is high enough, feeds the retrieved context into Llama 3.3 70B
    (via Groq) to generate a synthesized, plain-language answer grounded in that
-   context — rather than just returning the raw closest match
+   context, rather than just returning the raw closest match
 4. Returns the answer along with its sources and a confidence label, so the response
    isn't a black box
 
@@ -48,45 +48,6 @@ Response: { answer, sources, confidence, disclaimer }
 - **Backend:** FastAPI, FAISS, sentence-transformers, Groq API
 - **Frontend:** React, Vite
 - **Deployment:** Docker, Render (backend), Vercel (frontend)
-
-## Project structure
-
-```
-backend/
-  app.py                 # API + retrieval + generation logic
-  .env.example           # required environment variables
-frontend/
-  src/
-    app.jsx              # chat UI
-    style.css
-index_data/
-  faiss.index            # prebuilt vector index
-  meta.json              # question/answer metadata for the index
-medquad_clean.csv        # raw dataset (only needed to rebuild the index)
-preprocess_and_index.py  # builds index_data/ from the CSV
-accuracy.py              # retrieval evaluation script
-Dockerfile
-requirements.txt
-```
-
-## Running locally
-
-**Backend**
-```bash
-cp backend/.env.example backend/.env   # then fill in GROQ_API_KEY
-pip install -r requirements.txt
-uvicorn backend.app:app --reload --port 8000
-```
-
-**Frontend**
-```bash
-cd frontend
-cp .env.example .env
-npm install
-npm run dev
-```
-
-Requires a free Groq API key from [console.groq.com](https://console.groq.com).
 
 ## Why the confidence threshold matters
 

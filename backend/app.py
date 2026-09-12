@@ -10,18 +10,12 @@ from pathlib import Path
 from dotenv import load_dotenv
 from groq import Groq
 
-# Load .env from the backend/ folder specifically, regardless of the working
-# directory the server was launched from (fixes it not being found when
-# uvicorn is run from the project root instead of from inside backend/).
 load_dotenv(Path(__file__).resolve().parent / ".env")
 
 INDEX_DIR = "index_data"
 EMB_MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"
 TOP_K = 5
 
-# Below this cosine similarity, we don't trust the retrieved context enough
-# to let the LLM answer from it -> we fall back to a safe "don't know" response
-# instead of risking a hallucinated medical answer.
 CONFIDENCE_THRESHOLD = float(os.getenv("CONFIDENCE_THRESHOLD", "0.45"))
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
@@ -92,7 +86,6 @@ def health():
 
 
 def retrieve(query: str, top_k: int):
-    # fastembed returns a generator of float32 numpy arrays (one per input text)
     q_emb = np.array(list(embedder.embed([query])), dtype=np.float32)
     faiss.normalize_L2(q_emb)
 
@@ -171,7 +164,6 @@ def ask(req: QueryRequest):
         }
 
     if groq_client is None:
-        # No LLM configured -> degrade gracefully to raw retrieval instead of crashing.
         answer = results[0]["answer"]
     else:
         try:

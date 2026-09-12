@@ -1,4 +1,3 @@
-# preprocess_and_index.py
 import pandas as pd
 import os
 from sentence_transformers import SentenceTransformer
@@ -7,16 +6,15 @@ import faiss
 import json
 from typing import List
 
-CSV_PATH = "medquad_clean.csv"  # your uploaded file
-EMB_MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"  # small & fast
+CSV_PATH = "medquad_clean.csv"  
+EMB_MODEL_NAME = "sentence-transformers/all-MiniLM-L6-v2"  
 INDEX_DIR = "index_data"
-EMB_DIM = 384  # for all-MiniLM-L6-v2
+EMB_DIM = 384  
 
 os.makedirs(INDEX_DIR, exist_ok=True)
 
 def load_csv(path: str) -> pd.DataFrame:
     df = pd.read_csv(path)
-    # Expecting columns: Question, Answer
     df = df.dropna(subset=["Question","Answer"]).reset_index(drop=True)
     return df
 
@@ -26,7 +24,7 @@ def build_embeddings(texts: List[str], model_name=EMB_MODEL_NAME):
     return embeddings
 
 def build_faiss_index(embeddings: np.ndarray, dim:int=EMB_DIM):
-    index = faiss.IndexFlatIP(dim)  # inner product (use cosine if normalized)
+    index = faiss.IndexFlatIP(dim)  
     faiss.normalize_L2(embeddings)
     index.add(embeddings)
     return index
@@ -38,7 +36,6 @@ def save_index(index, meta_list, index_dir=INDEX_DIR):
 
 def main():
     df = load_csv(CSV_PATH)
-    # Build a single 'document' that is the answer + question meta
     docs = []
     for i, row in df.iterrows():
         docs.append({
@@ -46,9 +43,8 @@ def main():
             "question": str(row["Question"]),
             "answer": str(row["Answer"])
         })
-    texts_for_emb = [d["answer"] for d in docs]  # embed answers
+    texts_for_emb = [d["answer"] for d in docs]  
     embeddings = build_embeddings(texts_for_emb)
-    # normalize for cosine similarity
     faiss.normalize_L2(embeddings)
     index = build_faiss_index(embeddings, dim=embeddings.shape[1])
     save_index(index, docs)
