@@ -4,7 +4,10 @@ A retrieval-augmented generation (RAG) system that answers medical questions by
 combining semantic search with LLM-based synthesis, built with safety guardrails
 appropriate for a medical domain.
 
-**Live demo:** _[add your Vercel link here once deployed]_
+**Live demo:** https://intelligent-healthcare-assistant.vercel.app/
+
+> ⏳ Hosted on a free-tier backend that sleeps after 15 minutes of inactivity - 
+> the first request may take 30–50s to wake it up. Give it a moment on first load.
 
 ## What it does
 
